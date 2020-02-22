@@ -5,7 +5,6 @@
 [archlinuxcn]
 SigLevel = Never
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
-
 Server = http://mirrors.163.com/archlinux/$repo/os/$arch
 
 sudo pacman-mirrors -c China
@@ -17,7 +16,7 @@ pacman-key --populate
 sudo pacman -Syyu
 
 ### intel核显显卡驱动和x服务
-xorg-xinit xorg-server xorg-apps xf86-video-intel mesa
+pacman -S xorg-xinit xorg-server xorg-apps xf86-video-intel mesa
 
 ### 安装网络组建
 pacman -S dhcpcd  NetworkManager wpa_supplicant netctl network-manager-applet dialog 
@@ -39,6 +38,7 @@ pacman -S feh variety rofi neovim
 ### 魔改版compton，带有毛玻璃效果
 git clone https://github.com/tryone144/compton
 make && make install
+(需要安装libconfig、asciidoc)
 
 ### 安装sudo、新增一个管理员用户
 pacman -S zsh sudo
