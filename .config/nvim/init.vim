@@ -16,6 +16,8 @@ set ts=4
 set sw=4
 set termguicolors
 
+set clipboard=unnamedplus
+
 set foldmethod=indent
 set foldlevel=99
 
