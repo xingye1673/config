@@ -36,19 +36,26 @@ Plug 'mbbill/undotree'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'ryanoasis/vim-devicons'
+Plug 'voldikss/vim-floaterm'
 call plug#end()
 
 "主题、透明背景
 "let g:SnazzyTransparent = 1
 color snazzy
 
+" 设置环境变量 使java language server支持lombok
+let $JAVA_TOOL_OPTIONS="-javaagent:/Users/josh/Downloads/lombok.jar -Xbootclasspath/p:/Users/josh/Downloads"
+
 "打开关闭nerdtree文件目录
 map <F3> :NERDTreeMirror<CR>
 map <F3> :NERDTreeToggle<CR>
 map <F4> :NERDTreeFind<CR>
-
 "undotree
 noremap <F5> :UndotreeToggle<CR>
+
+"float term
+map <F6> :FloatermToggle<CR>
+map <F7> <c-\><c-n>
 
 "分屏快捷键
 noremap sk :set nosplitbelow<CR>:split<CR>:set splitbelow<CR>
@@ -73,17 +80,29 @@ noremap tn :tabe<CR>
 noremap th :-tabnext<CR>
 noremap tl :+tabnext<CR>
 
-"移动行和块
-nnoremap <C-j> :m .+1<CR>==
-nnoremap <C-k> :m .-2<CR>==
+"移动选中的行
+"nnoremap <C-j> :m .+1<CR>==
+"nnoremap <C-k> :m .-2<CR>==
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
+
+" 设置 leader 键，例子为空号键，也可以设置为其他的 默认为"\"
+let mapleader=" "
+ 
+" 设置leader快捷键
+map <leader>q :q<CR>
+map <leader>f :Files<CR>
+map <leader>r :Rg<CR>
+
+" 浮动terminal快捷键
+let g:floaterm_keymap_toggle = "<F12>"
 
 " 让输入上方，搜索列表在下方
 let $FZF_DEFAULT_OPTS = '--layout=reverse'
 
 " 打开 fzf 的方式选择 floating window
 let g:fzf_layout = { 'window': 'call OpenFloatingWin()' }
+
 
 " 浮动窗口函数
 function! OpenFloatingWin()
