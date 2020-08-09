@@ -1,4 +1,5 @@
 syntax on
+set mouse=a
 set number
 set relativenumber
 set cursorline
@@ -27,8 +28,6 @@ set foldlevel=99
 set hidden
 
 call plug#begin('~/.config/nvim/plugged')
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'fatih/vim-go', {'do': ':GoUpdateBinaries'}
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'vim-airline/vim-airline'
@@ -41,6 +40,8 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'voldikss/vim-floaterm'
 Plug 'easymotion/vim-easymotion'
 Plug 'Yggdroot/indentLine'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'skywind3000/vim-quickui'
 call plug#end()
 
 "主题、透明背景
@@ -85,7 +86,7 @@ map <leader>d :call CocAction('jumpDefinition')<CR>
 
 " coc-java
 map <leader>o :CocCommand java.action.organizeImports<CR>
-map <leader>c :CocCommand java.clean.workspace<CR>
+"map <leader>c :CocCommand java.clean.workspace<CR>
 
 " easymotion
 map <leader>e <Plug>(easymotion-s2)
@@ -122,11 +123,6 @@ noremap tl :+tabnext<CR>
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
 
- 
-
-
-
-
 " 让输入上方，搜索列表在下方
 "let $FZF_DEFAULT_OPTS = '--layout=reverse'
 
@@ -137,31 +133,52 @@ let $FZF_DEFAULT_OPTS="--height 100% --layout=reverse --preview '(highlight -O a
 
 " 浮动窗口函数
 function! OpenFloatingWin()
-	let height = &lines - 3
-	let width = float2nr(&columns - (&columns * 2 / 10))
-	let col = float2nr((&columns - width) / 2)
 
-	" 设置浮动窗口打开的位置，大小等。
-	" 这里的大小配置可能不是那么的 flexible 有继续改进的空间
-	let opts = {
-				\ 'relative': 'editor',
-				\ 'row': height * 0.3,
-				\ 'col': col + 30,
-				\ 'width': width * 2 / 3,
-				\ 'height': height / 2
-				\ }
+  let height = float2nr((&lines - 2) / 1.5)
+  let row = float2nr((&lines - height) / 2)
+  let width = float2nr(&columns / 1.5)
+  let col = float2nr((&columns - width) / 2)
 
-	let buf = nvim_create_buf(v:false, v:true)
-	let win = nvim_open_win(buf, v:true, opts)
+  " Main Window
+  let opts = {
+    \ 'relative': 'editor',
+    \ 'style': 'minimal',
+    \ 'width': width,
+    \ 'height': height,
+    \ 'col': col,
+    \ 'row': row,
+    \ }
 
-	" 设置浮动窗口高亮
-	call setwinvar(win, '&winhl', 'Normal:Pmenu')
+  let buf = nvim_create_buf(v:false, v:true)
+  let win = nvim_open_win(buf, v:true, opts)
 
-	setlocal
-				\ buftype=nofile
-				\ nobuflisted
-				\ bufhidden=hide
-				\ nonumber
-				\ norelativenumber
-				\ signcolumn=no
+  " 设置浮动窗口高亮
+  call setwinvar(win, '&winhl', 'Normal:Pmenu')
+
+  setlocal
+			\ buftype=nofile
+			\ nobuflisted
+			\ bufhidden=hide
+			\ nonumber
+			\ norelativenumber
+			\ signcolumn=no
 endfunction
+
+" 右键菜单
+let content_menus = [
+            \ ["跳转到定义处", ":call CocAction('jumpDefinition')" ],
+            \ ['跳转到声明处', ":call CocAction('jumpDeclaration')" ],
+			\ ['跳转到实现处', ":call CocAction('jumpImplementation')" ],
+            \ ['跳转到类型定义处', ":call CocAction('jumpTypeDefinition')" ],
+            \ ['跳转到引用处', ":call CocAction('jumpReferences')" ],
+			\ ['Show Commands', ':CocList commands' ],
+            \ ['Show Actions', ':CocList actions' ],
+            \ ['Show Info', ":call CocAction('doHover')" ],
+            \ ['Rename', ":call CocAction('rename')" ],
+            \ ]
+
+" set cursor to the last position
+let content_menu_opts = {'index':g:quickui#context#cursor, 'color': 'snazzy', 'border': 1}
+
+" bind to leader-c
+noremap <silent><leader>q :call quickui#context#open(content_menus, content_menu_opts)<CR>
