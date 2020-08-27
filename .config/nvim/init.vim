@@ -32,29 +32,32 @@ Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'connorholyday/vim-snazzy'
 Plug 'mbbill/undotree'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'voldikss/vim-floaterm'
 Plug 'easymotion/vim-easymotion'
-Plug 'Yggdroot/indentLine'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'skywind3000/vim-quickui'
+Plug 'chuling/ci_dark'
+Plug 'luochen1990/rainbow'
 call plug#end()
 
 "主题、透明背景
-"let g:SnazzyTransparent = 1
-color snazzy
+set termguicolors
+colorscheme ci_dark
 
-"tab线 前置空格
-"let g:indentLine_setColors = 0
-"let g:indentLine_leadingSpaceChar = '.'
-"let g:indentLine_leadingSpaceEnabled = 1
+set fillchars+=vert:│
 
-" airline主题、配置
-let g:airline_theme='bubblegum'
+let g:airline_theme = 'ci_dark'
+let g:lightline = {'colorscheme': 'ci_dark'}
+
+"彩虹括号
+let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+
+"airline主题、配置
+"let g:airline_theme='bubblegum'
 let g:airline_powerline_fonts = 1   
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
@@ -66,7 +69,6 @@ let $JAVA_TOOL_OPTIONS="-javaagent:/Users/josh/dev/lombok.jar -Xbootclasspath/p:
 let mapleader=" "
 
 "打开关闭nerdtree文件目录
-
 map <leader>3 :NERDTreeMirror<CR>
 map <leader>3 :NERDTreeToggle<CR>
 map <leader>4 :NERDTreeFind<CR>
@@ -75,18 +77,11 @@ map <leader>4 :NERDTreeFind<CR>
 map <leader>5 :UndotreeToggle<CR>
 
 " 浮动terminal快捷键
-let g:floaterm_keymap_toggle = "<leader>8"
+let g:floaterm_keymap_toggle = "<leader>t"
 
 " fzf
 map <leader>f :FloatermNew fzf<CR>
 map <leader>r :Rg<CR>
-
-" coc相关
-map <leader>d :call CocAction('jumpDefinition')<CR>
-
-" coc-java
-map <leader>o :CocCommand java.action.organizeImports<CR>
-"map <leader>c :CocCommand java.clean.workspace<CR>
 
 " easymotion
 map <leader>e <Plug>(easymotion-s2)
@@ -94,7 +89,6 @@ map <leader>e <Plug>(easymotion-s2)
 " 切换buffer
 map <leader>j :bp<CR>
 map <leader>k :bn<CR>
-
 
 "分屏快捷键
 noremap sk :set nosplitbelow<CR>:split<CR>:set splitbelow<CR>
@@ -108,6 +102,12 @@ noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
 
+"insert模式移动光标
+inoremap <C-h> <left>
+inoremap <C-j> <down>
+inoremap <C-k> <up>
+inoremap <C-l> <right>
+
 "调整分屏大小快捷键
 noremap m<up> :res +2<CR>
 noremap m<down> :res -2<CR>
@@ -116,15 +116,12 @@ noremap m<right> :vertical resize+2<CR>
 
 "tab页快捷键
 noremap tn :tabe<CR>
-noremap th :-tabnext<CR>
-noremap tl :+tabnext<CR>
+noremap tk :-tabnext<CR>
+noremap tj :+tabnext<CR>
 
 "移动选中的行
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
-
-" 让输入上方，搜索列表在下方
-"let $FZF_DEFAULT_OPTS = '--layout=reverse'
 
 " 打开 fzf 的方式选择 floating window
 let g:fzf_layout = { 'window': 'call OpenFloatingWin()' }
@@ -164,6 +161,8 @@ function! OpenFloatingWin()
 			\ signcolumn=no
 endfunction
 
+let g:coc_global_extensions = ['coc-marketplace', 'coc-actions', 'coc-json', 'coc-vimlsp', 'coc-html', 'coc-java', 'coc-tsserver', 'coc-go', 'coc-vetur']
+
 " 右键菜单
 let content_menus = [
             \ ["跳转到定义处", ":call CocAction('jumpDefinition')" ],
@@ -178,7 +177,7 @@ let content_menus = [
             \ ]
 
 " set cursor to the last position
-let content_menu_opts = {'index':g:quickui#context#cursor, 'color': 'snazzy', 'border': 1}
+let content_menu_opts = {'index':g:quickui#context#cursor, 'color': 'ci_dark', 'border': 1}
 
 " bind to leader-c
 noremap <silent><leader>q :call quickui#context#open(content_menus, content_menu_opts)<CR>
