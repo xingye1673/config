@@ -30,18 +30,23 @@ set hidden
 call plug#begin('~/.config/nvim/plugged')
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'ryanoasis/vim-devicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'junegunn/gv.vim'
 Plug 'mbbill/undotree'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'ryanoasis/vim-devicons'
+Plug 'Yggdroot/LeaderF'
 Plug 'voldikss/vim-floaterm'
 Plug 'easymotion/vim-easymotion'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'skywind3000/vim-quickui'
 Plug 'chuling/ci_dark'
 Plug 'luochen1990/rainbow'
+Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+Plug 'gcmt/wildfire.vim'
+"Plug 'puremourning/vimspector', {'do': './install_gadget.py --force-enable-java'}
 call plug#end()
 
 "主题、透明背景
@@ -79,9 +84,27 @@ map <leader>5 :UndotreeToggle<CR>
 " 浮动terminal快捷键
 let g:floaterm_keymap_toggle = "<leader>t"
 
-" fzf
-map <leader>f :FloatermNew fzf<CR>
-map <leader>r :Rg<CR>
+" leaderF
+map <leader>f :LeaderfFile<CR>
+map <leader>r :Leaderf rg<CR>
+map <leader>b :Leaderf buffer<CR>
+map <leader>m :Leaderf mru<CR>
+
+let g:Lf_WindowPosition = 'popup'
+let g:Lf_PreviewInPopup = 1
+let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "DejaVu Sans Mono for Powerline" }
+"let g:Lf_PreviewResult = {
+"    \ 'File': 1,
+"    \ 'Buffer': 1,
+"    \ 'Rg': 1,
+"    \ 'Mru': 1,
+"    \ 'Tag': 1,
+"    \ 'BufTag': 1,
+"    \ 'Function': 1,
+"    \ 'Line': 1,
+"    \ 'Colorscheme': 1
+"    \}
+
 
 " easymotion
 map <leader>e <Plug>(easymotion-s2)
@@ -108,11 +131,23 @@ inoremap <C-j> <down>
 inoremap <C-k> <up>
 inoremap <C-l> <right>
 
-"调整分屏大小快捷键
-noremap m<up> :res +2<CR>
-noremap m<down> :res -2<CR>
-noremap m<left> :vertical resize-2<CR>
-noremap m<right> :vertical resize+2<CR>
+" ===
+" === vimspector
+" ===
+"let g:vimspector_enable_mappings = 'HUMAN'
+"function! s:read_template_into_buffer(template)
+"	" has to be a function to avoid the extra space fzf#run insers otherwise
+"	execute '0r ~/.config/nvim/sample_vimspector_json/'.a:template
+"endfunction
+"command! -bang -nargs=* LoadVimSpectorJsonTemplate call fzf#run({
+"			\   'source': 'ls -1 ~/.config/nvim/sample_vimspector_json',
+"			\   'down': 20,
+"			\   'sink': function('<sid>read_template_into_buffer')
+"			\ })
+"" noremap <leader>vs :tabe .vimspector.json<CR>:LoadVimSpectorJsonTemplate<CR>
+"sign define vimspectorBP text=☛ texthl=Normal
+"sign define vimspectorBPDisabled text=☞ texthl=Normal
+"sign define vimspectorPC text=🔶 texthl=SpellBad
 
 "tab页快捷键
 noremap tn :tabe<CR>
@@ -123,45 +158,7 @@ noremap tj :+tabnext<CR>
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
 
-" 打开 fzf 的方式选择 floating window
-let g:fzf_layout = { 'window': 'call OpenFloatingWin()' }
-
-let $FZF_DEFAULT_OPTS="--height 100% --layout=reverse --preview '(highlight -O ansi {} || cat {}) 2> /dev/null | head -500'"
-
-" 浮动窗口函数
-function! OpenFloatingWin()
-
-  let height = float2nr((&lines - 2) / 1.5)
-  let row = float2nr((&lines - height) / 2)
-  let width = float2nr(&columns / 1.5)
-  let col = float2nr((&columns - width) / 2)
-
-  " Main Window
-  let opts = {
-    \ 'relative': 'editor',
-    \ 'style': 'minimal',
-    \ 'width': width,
-    \ 'height': height,
-    \ 'col': col,
-    \ 'row': row,
-    \ }
-
-  let buf = nvim_create_buf(v:false, v:true)
-  let win = nvim_open_win(buf, v:true, opts)
-
-  " 设置浮动窗口高亮
-  call setwinvar(win, '&winhl', 'Normal:Pmenu')
-
-  setlocal
-			\ buftype=nofile
-			\ nobuflisted
-			\ bufhidden=hide
-			\ nonumber
-			\ norelativenumber
-			\ signcolumn=no
-endfunction
-
-let g:coc_global_extensions = ['coc-marketplace', 'coc-actions', 'coc-json', 'coc-vimlsp', 'coc-html', 'coc-java', 'coc-tsserver', 'coc-go', 'coc-vetur']
+let g:coc_global_extensions = ['coc-marketplace', 'coc-actions', 'coc-json', 'coc-vimlsp', 'coc-html', 'coc-java', 'coc-tsserver', 'coc-go']
 
 " 右键菜单
 let content_menus = [
@@ -179,5 +176,5 @@ let content_menus = [
 " set cursor to the last position
 let content_menu_opts = {'index':g:quickui#context#cursor, 'color': 'ci_dark', 'border': 1}
 
-" bind to leader-c
+" bind to leader-q
 noremap <silent><leader>q :call quickui#context#open(content_menus, content_menu_opts)<CR>
