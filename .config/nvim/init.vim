@@ -46,7 +46,8 @@ Plug 'chuling/ci_dark'
 Plug 'luochen1990/rainbow'
 Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'gcmt/wildfire.vim'
-"Plug 'puremourning/vimspector', {'do': './install_gadget.py --force-enable-java'}
+Plug 'puremourning/vimspector', {'do': './install_gadget.py --force-enable-java'}
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 call plug#end()
 
 "主题、透明背景
@@ -89,21 +90,30 @@ map <leader>f :LeaderfFile<CR>
 map <leader>r :Leaderf rg<CR>
 map <leader>b :Leaderf buffer<CR>
 map <leader>m :Leaderf mru<CR>
+map <leader>l :Leaderf line<CR>
 
 let g:Lf_WindowPosition = 'popup'
 let g:Lf_PreviewInPopup = 1
 let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "DejaVu Sans Mono for Powerline" }
-"let g:Lf_PreviewResult = {
-"    \ 'File': 1,
-"    \ 'Buffer': 1,
-"    \ 'Rg': 1,
-"    \ 'Mru': 1,
-"    \ 'Tag': 1,
-"    \ 'BufTag': 1,
-"    \ 'Function': 1,
-"    \ 'Line': 1,
-"    \ 'Colorscheme': 1
-"    \}
+let g:Lf_StlColorscheme = 'ci_dark'
+let g:Lf_ShowRelativePath = 0
+let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
+" 模糊匹配忽略扩展名
+let g:Lf_WildIgnore = {
+	\ 'dir': ['.svn','.git','.hg'],
+	\ 'file': ['*.sw?','~$*','*.bak','*.exe','*.o','*.so','*.py[co]']
+	\ }
+let g:Lf_PreviewResult = {
+    \ 'File': 1,
+    \ 'Buffer': 1,
+    \ 'Rg': 1,
+    \ 'Mru': 1,
+    \ 'Tag': 1,
+    \ 'BufTag': 1,
+    \ 'Function': 1,
+    \ 'Line': 0,
+    \ 'Colorscheme': 1
+    \}
 
 
 " easymotion
@@ -131,10 +141,13 @@ inoremap <C-j> <down>
 inoremap <C-k> <up>
 inoremap <C-l> <right>
 
+"基础快捷键
+noremap Q :bd<CR>
+
 " ===
 " === vimspector
 " ===
-"let g:vimspector_enable_mappings = 'HUMAN'
+let g:vimspector_enable_mappings = 'HUMAN'
 "function! s:read_template_into_buffer(template)
 "	" has to be a function to avoid the extra space fzf#run insers otherwise
 "	execute '0r ~/.config/nvim/sample_vimspector_json/'.a:template
@@ -145,9 +158,9 @@ inoremap <C-l> <right>
 "			\   'sink': function('<sid>read_template_into_buffer')
 "			\ })
 "" noremap <leader>vs :tabe .vimspector.json<CR>:LoadVimSpectorJsonTemplate<CR>
-"sign define vimspectorBP text=☛ texthl=Normal
-"sign define vimspectorBPDisabled text=☞ texthl=Normal
-"sign define vimspectorPC text=🔶 texthl=SpellBad
+sign define vimspectorBP text=☛ texthl=Normal
+sign define vimspectorBPDisabled text=☞ texthl=Normal
+sign define vimspectorPC text=🔶 texthl=SpellBad
 
 "tab页快捷键
 noremap tn :tabe<CR>
@@ -158,7 +171,10 @@ noremap tj :+tabnext<CR>
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
 
-let g:coc_global_extensions = ['coc-marketplace', 'coc-actions', 'coc-json', 'coc-vimlsp', 'coc-html', 'coc-java', 'coc-tsserver', 'coc-go']
+let g:coc_global_extensions = ['coc-marketplace', 'coc-actions', 'coc-json', 'coc-vimlsp', 'coc-html', 'coc-java', 'coc-java-debug','coc-tsserver', 'coc-go']
+
+nmap <leader>cr <Plug>(coc-rename)
+nmap <leader>cf <Plug>(coc-refactor)
 
 " 右键菜单
 let content_menus = [
@@ -170,8 +186,8 @@ let content_menus = [
 			\ ['Show Commands', ':CocList commands' ],
             \ ['Show Actions', ':CocList actions' ],
             \ ['Show Info', ":call CocAction('doHover')" ],
-            \ ['Rename', ":call CocAction('rename')" ],
-            \ ]
+			\ ]
+"\ ['Rename', ":call CocAction('rename')" ],
 
 " set cursor to the last position
 let content_menu_opts = {'index':g:quickui#context#cursor, 'color': 'ci_dark', 'border': 1}
