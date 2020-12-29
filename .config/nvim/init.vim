@@ -48,6 +48,7 @@ Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'gcmt/wildfire.vim'
 Plug 'puremourning/vimspector', {'do': './install_gadget.py --force-enable-java'}
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'junegunn/vim-peekaboo'
 call plug#end()
 
 "主题、透明背景
