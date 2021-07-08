@@ -1,0 +1,12 @@
+source /etc/profile
+
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.zsh/sudo/sudo.plugin.zsh
+source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh
+
+#source ~/.zsh/spaceship-prompt/spaceship.zsh-theme
+
+# 匹配历史记录绑定上下方向键
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
