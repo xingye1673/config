@@ -1,0 +1,35 @@
+自用i3安装配置过程，整理中..
+Thinkbook 14+ 12700H/32G/网卡更换为Intel
+
+1.安装Manjaro i3版
+2.安装过程中使用Btrfs
+
+3.pacman.conf增加archlinuxcn
+[archlinuxcn]
+SigLevel = Never
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
+
+4.pacman切换中国源
+sudo pacman-mirrors -c China
+
+5.更新系统
+sudo pacman -Syyu
+
+6.安装中文输入法、中文字体
+sudo pacman -S fcitx-im fcitx-configtool fcitx-googlepinyin wqy-bitmapfont wqy-microhei wqy-zenhei
+
+7.安装常用软件
+sudo pacman -S alacritty neovim
+
+8.修改键位，capslock改为ctrl，右ctrl改为capslock
+sudo pacman -S xorg-xev
+xmodmap -pke > ~/.xmodmap
+vi ~/.xmodmap
+xmodmap ~/.xmodmap
+
+9.修改缩放
+vi ~/.Xresources
+Xft.dpi:       168
+
+10.中文输入法相关配置
+vi ~/.xprofile
