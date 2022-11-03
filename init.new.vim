@@ -140,12 +140,12 @@ nmap <silent>gr <Plug>(coc-references)
 xmap <leader>a <Plug>(coc-codeaction-selected)
 nmap <leader>a <Plug>(coc-codeaction-selected)
 
-nmap <leader>a c<Plug>(coc-codeaction)
-nmap <leader>q f<Plug>(coc-fix-current)
+nmap <leader>ac <Plug>(coc-codeaction)
+nmap <leader>qf <Plug>(coc-fix-current)
 
-nmap <leader>c l<Plug>(coc-codelens-action)
+nmap <leader>cl <Plug>(coc-codelens-action)
 
-nnoremap <silent> K :call ShowDocumentation()<CR>
+nnoremap <silent>K :call ShowDocumentation()<CR>
 
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
