@@ -1,0 +1,4 @@
+新版neovim相关配置
+
+搜索插件
+sudo pacman -S fzf the_silver_searcher
