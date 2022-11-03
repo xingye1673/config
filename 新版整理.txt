@@ -20,7 +20,7 @@ sudo pacman -Syyu
 sudo pacman -S fcitx-im fcitx-configtool fcitx-googlepinyin wqy-bitmapfont wqy-microhei wqy-zenhei
 
 7.安装常用软件
-sudo pacman -S alacritty neovim timeshift
+sudo pacman -S alacritty neovim timeshift chromium
 
 8.修改键位，capslock改为ctrl，右ctrl改为capslock
 sudo pacman -S xorg-xev
