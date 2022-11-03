@@ -49,6 +49,12 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'junegunn/vim-peekaboo'
 call plug#end()
 
+"insert模式移动光标
+inoremap <C-h> <left>
+inoremap <C-j> <down>
+inoremap <C-k> <up>
+inoremap <C-l> <right>
+
 "主题、透明背景
 set termguicolors
 colorscheme ci_dark
@@ -107,11 +113,6 @@ noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
 
-"insert模式移动光标
-inoremap <C-h> <left>
-inoremap <C-j> <down>
-inoremap <C-k> <up>
-inoremap <C-l> <right>
 
 "基础快捷键
 noremap Q :bd<CR>
@@ -125,20 +126,31 @@ noremap tj :+tabnext<CR>
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
 
-let g:coc_global_extensions = ['coc-marketplace', 'coc-actions', 'coc-json', 'coc-vimlsp', 'coc-html', 'coc-java', 'coc-java-debug','coc-tsserver', 'coc-go']
+"Coc配置
+let g:coc_global_extensions = ['coc-marketplace', 'coc-actions', 'coc-json', 'coc-vimlsp', 'coc-html', 'coc-java', 'coc-tsserver', 'coc-go']
 
 nmap <leader>cr <Plug>(coc-rename)
 nmap <leader>cf <Plug>(coc-refactor)
 
-" 右键菜单
-let content_menus = [
-            \ ["跳转到定义处", ":call CocAction('jumpDefinition')" ],
-            \ ['跳转到声明处', ":call CocAction('jumpDeclaration')" ],
-			\ ['跳转到实现处', ":call CocAction('jumpImplementation')" ],
-            \ ['跳转到类型定义处', ":call CocAction('jumpTypeDefinition')" ],
-            \ ['跳转到引用处', ":call CocAction('jumpReferences')" ],
-			\ ['Show Commands', ':CocList commands' ],
-            \ ['Show Actions', ':CocList actions' ],
-            \ ['Show Info', ":call CocAction('doHover')" ],
-			\ ]
-"\ ['Rename', ":call CocAction('rename')" ],
+nmap <silent>gd <Plug>(coc-definition)
+nmap <silent>gy <Plug>(coc-type-definition)
+nmap <silent>gi <Plug>(coc-implementation)
+nmap <silent>gr <Plug>(coc-references)
+
+xmap <leader>a <Plug>(coc-codeaction-selected)
+nmap <leader>a <Plug>(coc-codeaction-selected)
+
+nmap <leader>a c<Plug>(coc-codeaction)
+nmap <leader>q f<Plug>(coc-fix-current)
+
+nmap <leader>c l<Plug>(coc-codelens-action)
+
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
