@@ -37,4 +37,9 @@ Xft.dpi:       168
 10.中文输入法相关配置
 vi ~/.xprofile
 
-11.打快照sudo timeshift-gtk
+11.i3增加开机启动中文输入法
+exec --no-startup-id fcitx
+
+12.alacritty.yml配置
+
+20.打快照sudo timeshift-gtk
