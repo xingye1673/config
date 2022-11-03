@@ -2,3 +2,8 @@
 
 搜索插件
 sudo pacman -S fzf the_silver_searcher
+
+java8   jdk
+java11  jdk
+node14
+maven   3.3
