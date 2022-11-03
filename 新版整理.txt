@@ -2,6 +2,7 @@
 Thinkbook 14+ 12700H/32G/网卡更换为Intel
 
 1.安装Manjaro i3版
+
 2.安装过程中使用Btrfs
 
 3.pacman.conf增加archlinuxcn
@@ -26,6 +27,8 @@ sudo pacman -S xorg-xev
 xmodmap -pke > ~/.xmodmap
 vi ~/.xmodmap
 xmodmap ~/.xmodmap
+vi ~/.i3/config
+exec_always sleep 1; xmodmap ~/.xmodmap
 
 9.修改缩放
 vi ~/.Xresources
