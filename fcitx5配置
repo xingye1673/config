@@ -1,0 +1,29 @@
+manjaro安装fctix5 中文输入法
+之前的很多教程过时了
+
+1. 安装核心组件与依赖
+使用 pacman 安装所有必要的包。这里合并了核心框架、图形界面库支持（解决无法输入问题）和中文词库。
+
+# 安装 Fcitx5 框架、配置工具、GTK/QT 模块、中文组件
+sudo pacman -S fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-chinese-addons
+
+# (可选) 安装 Google Noto CJK 中文字体，避免方块乱码
+sudo pacman -S noto-fonts-cjk
+
+
+组件说明：
+fcitx5-chinese-addons: 包含拼音、双拼、五笔等引擎。
+fcitx5-gtk & fcitx5-qt: 至关重要，缺少它们会导致在浏览器、终端或部分软件中无法调出输入法。
+
+
+2. 配置环境变量
+注意：原文教程中将变量值写为 fcitx5 是错误的，必须写为 fcitx。
+推荐直接修改 /etc/environment 文件，这样对所有用户和 Wayland/X11 环境都生效且最稳定。
+打开文件：
+
+sudo nano /etc/environment
+在文件末尾追加以下内容：
+
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
